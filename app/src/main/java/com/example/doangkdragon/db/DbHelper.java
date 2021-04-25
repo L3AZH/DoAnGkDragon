@@ -9,8 +9,12 @@ import android.util.Log;
 
 import com.example.doangkdragon.db.models.GiaoVien;
 import com.example.doangkdragon.db.models.Mon;
+import com.example.doangkdragon.db.models.Phieu;
 import com.example.doangkdragon.db.models.SinhVien;
+import com.example.doangkdragon.db.models.ThongTinPhieu;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 public class DbHelper extends SQLiteOpenHelper {
@@ -63,7 +67,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Log.i(TAG, "onCreate: Tao table " + TABLE_PHIEUCHAMBAI);
         query = "CREATE TABLE " + TABLE_PHIEUCHAMBAI + " ( " +
                 COLUMN_SOPHIEU + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_NGAYGIAO + " DATE, " +
+                COLUMN_NGAYGIAO + " TEXT, " +
                 COLUMN_MAGV_FK + " INTEGER, " +
                 "FOREIGN KEY ( " + COLUMN_MAGV_FK + ") REFERENCES " + TABLE_GV + "(" + COLUMN_MAGV + ") );";
         db.execSQL(query);
@@ -80,13 +84,10 @@ public class DbHelper extends SQLiteOpenHelper {
         query = "CREATE TABLE " + TABLE_THONGTINCHAMBAI + " ( " +
                 COLUMN_SOPHIEU_FK + " INTEGER, " +
                 COLUMN_MAMH_FK + " INTEGER, " +
-                COLUMN_MASV_FK + " INTEGER, " +
-                COLUMN_NGAYGIAO + " DATE, " +
                 COLUMN_SOBAI + " INTEGER, " +
-                "PRIMARY KEY (" + COLUMN_SOPHIEU_FK + ", " + COLUMN_MAMH_FK + ", " + COLUMN_SOPHIEU_FK + "), " +
+                "PRIMARY KEY (" + COLUMN_SOPHIEU_FK + ", " + COLUMN_MAMH_FK + "), " +
                 "FOREIGN KEY ( " + COLUMN_SOPHIEU_FK + ") REFERENCES " + TABLE_PHIEUCHAMBAI + "(" + COLUMN_MAGV + "), " +
-                "FOREIGN KEY ( " + COLUMN_MAMH_FK + ") REFERENCES " + TABLE_MONHOC + "(" + COLUMN_MAMH + "), " +
-                "FOREIGN KEY ( " + COLUMN_MASV_FK + ") REFERENCES " + TABLE_SINHVIEN + "(" + COLUMN_MASV + "));";
+                "FOREIGN KEY ( " + COLUMN_MAMH_FK + ") REFERENCES " + TABLE_MONHOC + "(" + COLUMN_MAMH + ")); ";
         db.execSQL(query);
     }
 
@@ -150,6 +151,38 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public int addPhieuChamBai(Phieu phieu){
+        Log.i(TAG, "addPhieuChamBai: "+phieu.getMaPhieu()+" intoDatabase");
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NGAYGIAO,phieu.getNgay());
+        values.put(COLUMN_MAGV_FK,phieu.getMaGv());
+        try {
+            db.insert(TABLE_PHIEUCHAMBAI, null, values);
+            db.close();
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    public int addThongTinPhieuChamBai(ThongTinPhieu thongTinPhieu){
+        Log.i(TAG, "addThongTinPhieuChamBai: "+thongTinPhieu.getMaPhieu()+" intoDatabase");
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SOPHIEU_FK,thongTinPhieu.getMaPhieu());
+        values.put(COLUMN_MAMH_FK,thongTinPhieu.getMaMon());
+        values.put(COLUMN_SOBAI,thongTinPhieu.getSoBai());
+        try {
+            db.insert(TABLE_THONGTINCHAMBAI, null, values);
+            db.close();
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
     public Vector<GiaoVien> getListGv() {
         Log.i(TAG, "getListMaGv ...");
         Vector<GiaoVien> getListGv = new Vector<>();
@@ -193,6 +226,53 @@ public class DbHelper extends SQLiteOpenHelper {
                 getListMonHoc.add(monAdd);
             } while (cursor.moveToNext());
             return getListMonHoc;
+        }
+        return null;
+    }
+    public Vector<Phieu> getListPhieu(int maGv){
+        Log.i(TAG, "getListPhieu ...");
+        Vector<Phieu> getListPhieu = new Vector<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_PHIEUCHAMBAI + " WHERE "+COLUMN_MAGV_FK+" = ?;",
+                new String[]{String.valueOf(maGv)});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if(cursor.getCount() == 0){
+                return null;
+            }
+            do {
+                Phieu phieuAdd = new Phieu(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2));
+                getListPhieu.add(phieuAdd);
+            } while (cursor.moveToNext());
+            return getListPhieu;
+        }
+        return null;
+    }
+    public Vector<ThongTinPhieu> getListThongTinPhieu(int soPhieu){
+        Log.i(TAG, "getListThongTinPhieu ...");
+        Vector<ThongTinPhieu> getListThongTinPhieu = new Vector<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_THONGTINCHAMBAI + " WHERE "+COLUMN_SOPHIEU_FK+" = ?;",
+                new String[]{String.valueOf(soPhieu)});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if(cursor.getCount() == 0){
+                return null;
+            }
+            do {
+                ThongTinPhieu thongTinPhieuAdd = new ThongTinPhieu(
+                        cursor.getInt(0),
+                        cursor.getInt(1),
+                        cursor.getInt(2));
+                Log.i(TAG, "getListThongTinPhieu: sobai"+cursor.getInt(2));
+                getListThongTinPhieu.add(thongTinPhieuAdd);
+            } while (cursor.moveToNext());
+            return getListThongTinPhieu;
         }
         return null;
     }

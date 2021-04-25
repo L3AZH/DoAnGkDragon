@@ -54,7 +54,9 @@ public class QuanLyFragment extends Fragment {
         adapter.handlerListener = new ViewPaggerAdapter.handlerOnclickItemGv() {
             @Override
             public void handlerOnclick(GiaoVien giaoVien) {
-                NavHostFragment.findNavController(QuanLyFragment.this).navigate(R.id.action_quanLyFragment_to_giaoVienFragment);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("giaovien",giaoVien);
+                NavHostFragment.findNavController(QuanLyFragment.this).navigate(R.id.action_quanLyFragment_to_giaoVienFragment,bundle);
             }
 
             @Override
@@ -88,4 +90,5 @@ public class QuanLyFragment extends Fragment {
             }
         });
     }
+
 }

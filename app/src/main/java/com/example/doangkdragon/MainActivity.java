@@ -12,6 +12,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,15 +25,25 @@ import com.example.doangkdragon.databinding.ActivityMainBinding;
 import com.example.doangkdragon.db.DbHelper;
 import com.example.doangkdragon.db.models.GiaoVien;
 import com.example.doangkdragon.db.models.Mon;
+import com.example.doangkdragon.db.models.Phieu;
+import com.example.doangkdragon.db.models.ThongTinPhieu;
 import com.example.doangkdragon.dialog.AddGiaoVienDialog;
 import com.example.doangkdragon.dialog.AddMonHocDialog;
+import com.example.doangkdragon.dialog.AddPhieuDialog;
+import com.example.doangkdragon.dialog.AddThongTinPhieuDialog;
+import com.example.doangkdragon.fragment.GiaoVienFragment;
 import com.example.doangkdragon.fragment.QuanLyFragment;
 import com.example.doangkdragon.fragment.ThongKeFragment;
+import com.example.doangkdragon.fragment.ThongTinPhieuFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Vector;
 
-public class MainActivity extends AppCompatActivity implements AddGiaoVienDialog.UpdateDialogListener, AddMonHocDialog.UpdateDiaLogListener {
+public class MainActivity extends AppCompatActivity implements
+        AddGiaoVienDialog.UpdateDialogListener,
+        AddMonHocDialog.UpdateDiaLogListener,
+        AddPhieuDialog.UpdateDiaLogListener,
+        AddThongTinPhieuDialog.UpdateDiaLogListener {
 
     private ActivityMainBinding binding;
     private DbHelper db;
@@ -59,5 +70,21 @@ public class MainActivity extends AppCompatActivity implements AddGiaoVienDialog
         QuanLyFragment quanLyFragment = (QuanLyFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
         quanLyFragment.adapter.listMonHoc = listUpdate;
         quanLyFragment.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateListPhieu(Vector<Phieu> listUpdate) {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        GiaoVienFragment giaoVienFragment = (GiaoVienFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        giaoVienFragment.phieuAdapter.listPhieu = listUpdate;
+        giaoVienFragment.phieuAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateListThongTinPhieu(Vector<ThongTinPhieu> listUpdate) {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        ThongTinPhieuFragment thongTinPhieuFragment = (ThongTinPhieuFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        thongTinPhieuFragment.adapter.listThongTinPhieu = listUpdate;
+        thongTinPhieuFragment.adapter.notifyDataSetChanged();
     }
 }

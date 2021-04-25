@@ -22,6 +22,21 @@
         android:id="@+id/giaoVienFragment"
         android:name="com.example.doangkdragon.fragment.GiaoVienFragment"
         android:label="fragment_giao_vien"
-        tools:layout="@layout/fragment_giao_vien" />
+        tools:layout="@layout/fragment_giao_vien" >
+        <argument
+            android:name="giaovien"
+            app:argType="com.example.doangkdragon.db.models.GiaoVien" />
+        <action
+            android:id="@+id/action_giaoVienFragment_to_thongTinPhieuFragment"
+            app:destination="@id/thongTinPhieuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/thongTinPhieuFragment"
+        android:name="com.example.doangkdragon.fragment.ThongTinPhieuFragment"
+        android:label="ThongTinPhieuFragment" >
+        <argument
+            android:name="phieu"
+            app:argType="com.example.doangkdragon.db.models.Phieu" />
+    </fragment>
 
 </navigation>
