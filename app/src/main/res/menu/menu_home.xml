@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/quanLyFragment"
+        android:title="Quản lý"
+        android:icon="@drawable/ic_launcher_foreground"/>
+    <item
+        android:id="@+id/thongKeFragment"
+        android:title="Thống kê"
+        android:icon="@drawable/ic_launcher_foreground"/>
+</menu>

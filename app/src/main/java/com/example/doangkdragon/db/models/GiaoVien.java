@@ -1,13 +1,21 @@
 package com.example.doangkdragon.db.models;
 
-public class GiaoVien {
+import java.io.Serializable;
+
+public class GiaoVien implements Serializable {
     private int maGv;
     private String hoTenGv;
     private int SDT;
     private byte[] hinh;
 
-    public GiaoVien(int maGv, String hoTenGv, int SDT, byte[] hinh) {
+    public GiaoVien(int maGv,String hoTenGv, int SDT, byte[] hinh){
         this.maGv = maGv;
+        this.hoTenGv = hoTenGv;
+        this.SDT = SDT;
+        this.hinh = hinh;
+    }
+
+    public GiaoVien(String hoTenGv, int SDT, byte[] hinh) {
         this.hoTenGv = hoTenGv;
         this.SDT = SDT;
         this.hinh = hinh;

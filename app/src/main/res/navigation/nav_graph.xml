@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/quanLyFragment">
+    <fragment
+        android:id="@+id/quanLyFragment"
+        android:name="com.example.doangkdragon.fragment.QuanLyFragment"
+        android:label="QuanLyFragment">
+        <action
+            android:id="@+id/action_quanLyFragment_to_giaoVienFragment"
+            app:destination="@id/giaoVienFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/thongKeFragment"
+        android:name="com.example.doangkdragon.fragment.ThongKeFragment"
+        android:label="ThongKeFragment">
+    </fragment>
+    <fragment
+        android:id="@+id/giaoVienFragment"
+        android:name="com.example.doangkdragon.fragment.GiaoVienFragment"
+        android:label="fragment_giao_vien"
+        tools:layout="@layout/fragment_giao_vien" />
+
+</navigation>

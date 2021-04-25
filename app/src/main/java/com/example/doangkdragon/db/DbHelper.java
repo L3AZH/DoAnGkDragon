@@ -135,10 +135,10 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public int addMonHoc(Mon monHoc) {
-        Log.i(TAG, "Adding Mon hoc: " + monHoc.getHoTenMh() + " into Database");
+        Log.i(TAG, "Adding Mon hoc: " + monHoc.getTenMh() + " into Database");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_TENMH, monHoc.getHoTenMh());
+        values.put(COLUMN_TENMH, monHoc.getTenMh());
         values.put(COLUMN_CHIPHI, monHoc.getChiPhi());
         try {
             db.insert(TABLE_MONHOC, null, values);
@@ -154,10 +154,11 @@ public class DbHelper extends SQLiteOpenHelper {
         Log.i(TAG, "getListMaGv ...");
         Vector<GiaoVien> getListGv = new Vector<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + COLUMN_MAGV + " FROM " + TABLE_GV + ";", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_GV + ";", null);
         if (cursor != null) {
             cursor.moveToFirst();
             if(cursor.getCount() == 0){
+                Log.i(TAG, "null");
                 return null;
             }
             do {
@@ -169,6 +170,29 @@ public class DbHelper extends SQLiteOpenHelper {
                 getListGv.add(gvAdd);
             } while (cursor.moveToNext());
             return getListGv;
+        }
+        Log.i(TAG, "null");
+        return null;
+    }
+
+    public Vector<Mon> getListMonHoc(){
+        Log.i(TAG, "getListMonHoc ...");
+        Vector<Mon> getListMonHoc = new Vector<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MONHOC + ";", null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if(cursor.getCount() == 0){
+                return null;
+            }
+            do {
+                Mon monAdd = new Mon(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getDouble(2));
+                getListMonHoc.add(monAdd);
+            } while (cursor.moveToNext());
+            return getListMonHoc;
         }
         return null;
     }

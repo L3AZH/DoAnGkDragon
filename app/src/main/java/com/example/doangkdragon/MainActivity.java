@@ -1,23 +1,38 @@
 package com.example.doangkdragon;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import com.example.doangkdragon.databinding.ActivityMainBinding;
 import com.example.doangkdragon.db.DbHelper;
 import com.example.doangkdragon.db.models.GiaoVien;
+import com.example.doangkdragon.db.models.Mon;
+import com.example.doangkdragon.dialog.AddGiaoVienDialog;
+import com.example.doangkdragon.dialog.AddMonHocDialog;
+import com.example.doangkdragon.fragment.QuanLyFragment;
+import com.example.doangkdragon.fragment.ThongKeFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Vector;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AddGiaoVienDialog.UpdateDialogListener, AddMonHocDialog.UpdateDiaLogListener {
 
     private ActivityMainBinding binding;
     private DbHelper db;
@@ -26,19 +41,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
-        db = new DbHelper(this);
-        loadSpinner();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupWithNavController(binding.bottomNavigationView,navController);
     }
 
-    public void loadSpinner(){
-        Vector<GiaoVien>listGv = db.getListGv();
-        Vector<Integer> listMaGv = new Vector<>();
-        if(listGv != null){
-            for(GiaoVien x: listGv){
-                listMaGv.add(x.getMaGv());
-            }
-        }
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,listMaGv);
-        binding.maGvspinner.setAdapter(adapter);
+    @Override
+    public void updateListGv(Vector<GiaoVien> listUpdate) {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        QuanLyFragment quanLyFragment = (QuanLyFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        quanLyFragment.adapter.listGiaoVien = listUpdate;
+        quanLyFragment.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateListMonHoc(Vector<Mon> listUpdate) {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        QuanLyFragment quanLyFragment = (QuanLyFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        quanLyFragment.adapter.listMonHoc = listUpdate;
+        quanLyFragment.adapter.notifyDataSetChanged();
     }
 }

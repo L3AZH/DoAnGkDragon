@@ -1,15 +1,27 @@
 package com.example.doangkdragon.db.models;
 
 public class Mon {
-    private String hoTenMh;
+    private int maMh;
+    private String tenMh;
     private double chiPhi;
 
-    public String getHoTenMh() {
-        return hoTenMh;
+    public Mon(int maMon,String tenMon, double chiPhi){
+        this.maMh = maMon;
+        this.tenMh = tenMon;
+        this.chiPhi = chiPhi;
     }
 
-    public void setHoTenMh(String hoTenMh) {
-        this.hoTenMh = hoTenMh;
+    public Mon(String tenMon, double chiPhi){
+        this.tenMh = tenMon;
+        this.chiPhi = chiPhi;
+    }
+
+    public String getTenMh() {
+        return tenMh;
+    }
+
+    public void setTenMh(String tenMh) {
+        this.tenMh = tenMh;
     }
 
     public double getChiPhi() {
@@ -18,5 +30,9 @@ public class Mon {
 
     public void setChiPhi(double chiPhi) {
         this.chiPhi = chiPhi;
+    }
+
+    public int getMaMh() {
+        return maMh;
     }
 }
