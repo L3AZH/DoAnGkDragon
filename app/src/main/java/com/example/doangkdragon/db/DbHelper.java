@@ -218,6 +218,22 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public int updatePhieu(Phieu phieu){
+        Log.i(TAG, "Updating phieu: " + phieu.getMaPhieu() + " into Database");
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NGAYGIAO, phieu.getNgay());
+        try {
+            int re = db.update(TABLE_PHIEUCHAMBAI,values,COLUMN_SOPHIEU+" = ? " ,
+                    new String[]{String.valueOf(phieu.getMaPhieu())});
+            db.close();
+            return re;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public Vector<GiaoVien> getListGv() {
         Log.i(TAG, "getListMaGv ...");
         Vector<GiaoVien> getListGv = new Vector<>();
@@ -358,6 +374,33 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         if(checkDeleteMonHoc(mon.getMaMh())){
             db.delete(TABLE_MONHOC,COLUMN_MAMH+"=?", new String[] {String.valueOf(mon.getMaMh())});
+            db.close();
+            return 1;
+        }
+        else{
+            return -1;
+        }
+    }
+    public boolean checkDeletePhieu(int maPhieu){
+        Log.i(TAG, "Check phieu hoc da ton tai chi tiet thong tin phieu  ...");
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_THONGTINCHAMBAI + " WHERE "+COLUMN_SOPHIEU_FK+" = ?;",
+                new String[]{String.valueOf(maPhieu)});
+        if(cursor != null){
+            cursor.moveToFirst();
+            if(cursor.getCount() == 0){
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+    public int deletePhieu(Phieu phieu){
+        Log.i(TAG, "deleteGv: "+phieu.getMaPhieu()+" ....");
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(checkDeletePhieu(phieu.getMaPhieu())){
+            db.delete(TABLE_PHIEUCHAMBAI,COLUMN_SOPHIEU+"=?", new String[] {String.valueOf(phieu.getMaPhieu())});
             db.close();
             return 1;
         }

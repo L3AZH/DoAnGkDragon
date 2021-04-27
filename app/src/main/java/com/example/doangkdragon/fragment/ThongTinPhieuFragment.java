@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.example.doangkdragon.databinding.FragmentThongTinPhieuBinding;
 import com.example.doangkdragon.db.DbHelper;
 import com.example.doangkdragon.db.models.Phieu;
 import com.example.doangkdragon.dialog.AddThongTinPhieuDialog;
+import com.example.doangkdragon.dialog.UpdatePhieuDialog;
 
 public class ThongTinPhieuFragment extends Fragment {
 
@@ -46,6 +48,8 @@ public class ThongTinPhieuFragment extends Fragment {
         setUpInfoPhieu();
         setUpRecycleViewList();
         setOnclickFloatBtn();
+        setOnclickEditBtn();
+        setOnclickDeleteBtn();
     }
 
     public void setUpInfoPhieu(){
@@ -73,6 +77,30 @@ public class ThongTinPhieuFragment extends Fragment {
                     AddThongTinPhieuDialog dialog = new AddThongTinPhieuDialog(phieuGetFromList.getMaPhieu());
                     dialog.show(getActivity().getSupportFragmentManager(),"dialog add thong tin phieu");
                 }
+            }
+        });
+    }
+    public void setOnclickEditBtn(){
+        binding.editThongTinPhieuBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpdatePhieuDialog dialog = new UpdatePhieuDialog(phieuGetFromList);
+                dialog.show(getActivity().getSupportFragmentManager(),"update phieu dialog ");
+            }
+        });
+    }
+    public void setOnclickDeleteBtn(){
+        binding.deleteThongTinPhieuBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbHelper db = new DbHelper(getContext());
+                int re = db.deletePhieu(phieuGetFromList);
+                Toast.makeText(getContext(), "Delete re "+ re, Toast.LENGTH_SHORT).show();
+                db.close();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("giaovien",ThongTinPhieuFragmentArgs.fromBundle(getArguments()).getGiaovien());
+                NavHostFragment.findNavController(ThongTinPhieuFragment.this).navigate(
+                        R.id.action_thongTinPhieuFragment_to_giaoVienFragment,bundle);
             }
         });
     }

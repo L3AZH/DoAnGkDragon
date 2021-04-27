@@ -69,6 +69,7 @@ public class GiaoVienFragment extends Fragment{
             public void onClickItem(Phieu phieu) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("phieu",phieu);
+                bundle.putSerializable("giaovien",gvGetFormList);
                 NavHostFragment.findNavController(GiaoVienFragment.this).navigate(R.id.action_giaoVienFragment_to_thongTinPhieuFragment,bundle);
             }
         };

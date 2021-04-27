@@ -34,6 +34,7 @@ import com.example.doangkdragon.dialog.AddThongTinPhieuDialog;
 import com.example.doangkdragon.dialog.InfoMonHocDialog;
 import com.example.doangkdragon.dialog.UpdateGiaoVienDialog;
 import com.example.doangkdragon.dialog.UpdateMonHocDialog;
+import com.example.doangkdragon.dialog.UpdatePhieuDialog;
 import com.example.doangkdragon.fragment.GiaoVienFragment;
 import com.example.doangkdragon.fragment.QuanLyFragment;
 import com.example.doangkdragon.fragment.ThongKeFragment;
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements
         AddThongTinPhieuDialog.UpdateDiaLogListener,
         UpdateGiaoVienDialog.UpdateDialogListener,
         InfoMonHocDialog.UpdateInfoMonHocListener,
-        UpdateMonHocDialog.UpdateMonHocDialogListener {
+        UpdateMonHocDialog.UpdateMonHocDialogListener,
+        UpdatePhieuDialog.UpdatePhieuDialogListenter {
 
     private ActivityMainBinding binding;
 
@@ -115,5 +117,13 @@ public class MainActivity extends AppCompatActivity implements
         QuanLyFragment quanLyFragment = (QuanLyFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
         quanLyFragment.adapter.listMonHoc = listMon;
         quanLyFragment.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateNgayPhieu(Phieu phieu) {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        ThongTinPhieuFragment thongTinPhieuFragment = (ThongTinPhieuFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        thongTinPhieuFragment.phieuGetFromList = phieu;
+        thongTinPhieuFragment.setUpInfoPhieu();
     }
 }

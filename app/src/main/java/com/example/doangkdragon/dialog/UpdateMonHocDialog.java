@@ -59,14 +59,22 @@ public class UpdateMonHocDialog extends DialogFragment {
         binding.saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DbHelper db = new DbHelper(getContext());
-                Mon mon = new Mon(monHocUpdate.getMaMh(),binding.tenMonHocEditText.getText().toString(),
-                        Double.parseDouble(binding.chiPhiEditText.getText().toString()));
-                int re = db.updateMonHoc(mon);
-                Toast.makeText(getContext(), "Update result "+re, Toast.LENGTH_SHORT).show();
-                listener.update_updateMonHocDialog(db.getListMonHoc());
-                db.close();
-                getDialog().cancel();
+                if(binding.tenMonHocEditText.getText().toString().trim().isEmpty()){
+                    Toast.makeText(getContext(), "Vui lòng điền tên môn học", Toast.LENGTH_SHORT).show();
+                }
+                else if(binding.chiPhiEditText.getText().toString().trim().isEmpty()){
+                    Toast.makeText(getContext(), "Vui lòng điền chi phí", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    DbHelper db = new DbHelper(getContext());
+                    Mon mon = new Mon(monHocUpdate.getMaMh(),binding.tenMonHocEditText.getText().toString(),
+                            Double.parseDouble(binding.chiPhiEditText.getText().toString()));
+                    int re = db.updateMonHoc(mon);
+                    Toast.makeText(getContext(), "Update result "+re, Toast.LENGTH_SHORT).show();
+                    listener.update_updateMonHocDialog(db.getListMonHoc());
+                    db.close();
+                    getDialog().cancel();
+                }
             }
         });
     }

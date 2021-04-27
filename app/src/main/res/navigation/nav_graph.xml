@@ -40,6 +40,12 @@
         <argument
             android:name="phieu"
             app:argType="com.example.doangkdragon.db.models.Phieu" />
+        <action
+            android:id="@+id/action_thongTinPhieuFragment_to_giaoVienFragment"
+            app:destination="@id/giaoVienFragment" />
+        <argument
+            android:name="giaovien"
+            app:argType="com.example.doangkdragon.db.models.GiaoVien" />
     </fragment>
 
 </navigation>
