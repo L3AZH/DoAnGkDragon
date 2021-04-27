@@ -3,7 +3,6 @@ package com.example.doangkdragon.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,19 +17,17 @@ import androidx.fragment.app.DialogFragment;
 import com.example.doangkdragon.R;
 import com.example.doangkdragon.databinding.DialogAddThongtinphieuBinding;
 import com.example.doangkdragon.db.DbHelper;
-import com.example.doangkdragon.db.models.Mon;
-import com.example.doangkdragon.db.models.Phieu;
 import com.example.doangkdragon.db.models.ThongTinPhieu;
 
 import java.util.Vector;
 
-public class AddThongTinPhieuDialog extends DialogFragment {
-    private DialogAddThongtinphieuBinding binding;
-    public UpdateDiaLogListener listener;
-    private int soPhieu;
+public class UpdateChiTietThongTinPhieuDialog extends DialogFragment {
 
-    public AddThongTinPhieuDialog(int soPhieu){
-        this.soPhieu = soPhieu;
+    public DialogAddThongtinphieuBinding binding;
+    public ThongTinPhieu thongTinPhieu;
+    public UpdateChiTietThongTinPhieuListener listener;
+    public UpdateChiTietThongTinPhieuDialog(ThongTinPhieu thongTinPhieu){
+        this.thongTinPhieu = thongTinPhieu;
     }
     @NonNull
     @Override
@@ -39,26 +36,18 @@ public class AddThongTinPhieuDialog extends DialogFragment {
         LayoutInflater layoutInflater = requireActivity().getLayoutInflater();
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.dialog_add_thongtinphieu, null, false);
         builder.setView(binding.getRoot());
-        setUpSpinner();
+        setUpInfoThongTinPhieu();
         setOnclickCancelBtn();
         setOnclickSaveBtn();
         return builder.create();
     }
-    public void setUpSpinner(){
-        DbHelper db = new DbHelper(getContext());
-        Vector<String> listMonString = new Vector<>();
-        Vector<Mon> listMon = db.getListMonHoc();
-        if(listMon == null){
-            listMonString.add("List Mon hoc rong !!");
-        }
-        else{
-            for(Mon monHoc: listMon){
-                listMonString.add(String.valueOf(monHoc.getMaMh())+"-"+monHoc.getTenMh());
-            }
-        }
-        db.close();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),R.layout.support_simple_spinner_dropdown_item,listMonString);
+
+    public void setUpInfoThongTinPhieu(){
+        Vector<String> list = new Vector<>();
+        list.add(String.valueOf(thongTinPhieu.getMaMon()));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),R.layout.support_simple_spinner_dropdown_item,list);
         binding.spinnerMaMon.setAdapter(adapter);
+        binding.soBaiEditText.setText(String.valueOf(thongTinPhieu.getSoBai()));
     }
     public void setOnclickCancelBtn(){
         binding.cancelThongTinPhieuBtn.setOnClickListener(new View.OnClickListener() {
@@ -73,34 +62,34 @@ public class AddThongTinPhieuDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if(binding.soBaiEditText.getText().toString().trim().isEmpty()){
-                    Toast.makeText(getContext(), "Vui long dien so bai", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Vui long nhap so bai", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     DbHelper db = new DbHelper(getContext());
-                    String thongTinPhieuAddString[] = binding.spinnerMaMon.getSelectedItem().toString().split("-");
-                    ThongTinPhieu thongTinPhieuAdd = new ThongTinPhieu(soPhieu,
-                            Integer.parseInt(thongTinPhieuAddString[0]),Integer.parseInt(binding.soBaiEditText.getText().toString()));
-                    int re = db.addThongTinPhieuChamBai(thongTinPhieuAdd);
-                    Toast.makeText(getContext(), "Result add = "+re, Toast.LENGTH_SHORT).show();
-                    listener.updateListThongTinPhieu(db.getListThongTinPhieu(soPhieu));
+                    ThongTinPhieu thongTinPhieuUpdate = new ThongTinPhieu(thongTinPhieu.getMaPhieu(),
+                            thongTinPhieu.getMaMon(),Integer.parseInt(binding.soBaiEditText.getText().toString()));
+                    db.updateThongTinPhieu(thongTinPhieuUpdate);
+                    listener.updateListThongTinPhieu_dialogUpdateChiTietThongTinPhieu(db.getListThongTinPhieu(thongTinPhieuUpdate.getMaPhieu()));
                     db.close();
                     getDialog().cancel();
                 }
             }
         });
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            listener = (UpdateDiaLogListener) context;
+            listener = (UpdateChiTietThongTinPhieuListener) context;
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public interface UpdateDiaLogListener{
-        public void updateListThongTinPhieu(Vector<ThongTinPhieu> listUpdate);
+    public interface UpdateChiTietThongTinPhieuListener{
+        public void updateListThongTinPhieu_dialogUpdateChiTietThongTinPhieu(Vector<ThongTinPhieu> listThongTinPhieu);
     }
+
 }

@@ -23,7 +23,9 @@ import com.example.doangkdragon.databinding.FragmentThongKeBinding;
 import com.example.doangkdragon.databinding.FragmentThongTinPhieuBinding;
 import com.example.doangkdragon.db.DbHelper;
 import com.example.doangkdragon.db.models.Phieu;
+import com.example.doangkdragon.db.models.ThongTinPhieu;
 import com.example.doangkdragon.dialog.AddThongTinPhieuDialog;
+import com.example.doangkdragon.dialog.InfoChiTietThongTinPhieuDialog;
 import com.example.doangkdragon.dialog.UpdatePhieuDialog;
 
 public class ThongTinPhieuFragment extends Fragment {
@@ -61,6 +63,13 @@ public class ThongTinPhieuFragment extends Fragment {
     public void setUpRecycleViewList(){
         DbHelper db = new DbHelper(getContext());
         adapter = new ThongTinPhieuChamBaiAdapter(db.getListThongTinPhieu(phieuGetFromList.getMaPhieu()));
+        adapter.listener = new ThongTinPhieuChamBaiAdapter.onClickItemListener() {
+            @Override
+            public void onClickItem(ThongTinPhieu thongTinPhieu) {
+                InfoChiTietThongTinPhieuDialog dialog = new InfoChiTietThongTinPhieuDialog(thongTinPhieu);
+                dialog.show(getActivity().getSupportFragmentManager(),"info chi tiet thong tin phieu dialog");
+            }
+        };
         db.close();
         binding.listThongTinPhieu.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         binding.listThongTinPhieu.setAdapter(adapter);

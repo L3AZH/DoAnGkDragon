@@ -57,7 +57,7 @@ public class ThongTinPhieuChamBaiAdapter extends RecyclerView.Adapter<ThongTinPh
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //listener.onClickItem(thongTinPhieu);
+                    listener.onClickItem(thongTinPhieu);
                 }
             });
         }

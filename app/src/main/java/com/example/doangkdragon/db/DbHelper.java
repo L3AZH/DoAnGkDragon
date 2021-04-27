@@ -166,6 +166,20 @@ public class DbHelper extends SQLiteOpenHelper {
             return 0;
         }
     }
+    public boolean checkThongTinPhieuChamBai(ThongTinPhieu thongTinPhieu){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_THONGTINCHAMBAI + " WHERE "+COLUMN_MAMH_FK+" = ? AND "+COLUMN_SOPHIEU_FK+" = ?",
+                new String[]{String.valueOf(thongTinPhieu.getMaMon()),String.valueOf(thongTinPhieu.getMaPhieu())});
+        if(cursor != null){
+            cursor.moveToFirst();
+            if(cursor.getCount() == 0){
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
     public int addThongTinPhieuChamBai(ThongTinPhieu thongTinPhieu){
         Log.i(TAG, "addThongTinPhieuChamBai: "+thongTinPhieu.getMaPhieu()+" intoDatabase");
         SQLiteDatabase db = this.getWritableDatabase();
@@ -173,13 +187,18 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(COLUMN_SOPHIEU_FK,thongTinPhieu.getMaPhieu());
         values.put(COLUMN_MAMH_FK,thongTinPhieu.getMaMon());
         values.put(COLUMN_SOBAI,thongTinPhieu.getSoBai());
-        try {
-            db.insert(TABLE_THONGTINCHAMBAI, null, values);
-            db.close();
-            return 1;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
+        if(checkThongTinPhieuChamBai(thongTinPhieu)){
+            try {
+                db.insert(TABLE_THONGTINCHAMBAI, null, values);
+                db.close();
+                return 1;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return 0;
+            }
+        }
+        else{
+            return -1;
         }
     }
 
@@ -226,6 +245,22 @@ public class DbHelper extends SQLiteOpenHelper {
         try {
             int re = db.update(TABLE_PHIEUCHAMBAI,values,COLUMN_SOPHIEU+" = ? " ,
                     new String[]{String.valueOf(phieu.getMaPhieu())});
+            db.close();
+            return re;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public int updateThongTinPhieu(ThongTinPhieu thongTinPhieu){
+        Log.i(TAG, "Updating thong tin phieu: " + thongTinPhieu.getMaPhieu() + " into Database");
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SOBAI, thongTinPhieu.getSoBai());
+        try {
+            int re = db.update(TABLE_THONGTINCHAMBAI,values,COLUMN_SOPHIEU_FK+" = ? AND "+COLUMN_MAMH_FK+" = ?" ,
+                    new String[]{String.valueOf(thongTinPhieu.getMaPhieu()),String.valueOf(thongTinPhieu.getMaMon())});
             db.close();
             return re;
         } catch (Exception e) {
@@ -370,7 +405,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return true;
     }
     public int deleteMonHoc(Mon mon){
-        Log.i(TAG, "deleteGv: "+mon.getMaMh()+" ....");
+        Log.i(TAG, "deleteMon: "+mon.getMaMh()+" ....");
         SQLiteDatabase db = this.getWritableDatabase();
         if(checkDeleteMonHoc(mon.getMaMh())){
             db.delete(TABLE_MONHOC,COLUMN_MAMH+"=?", new String[] {String.valueOf(mon.getMaMh())});
@@ -397,7 +432,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return true;
     }
     public int deletePhieu(Phieu phieu){
-        Log.i(TAG, "deleteGv: "+phieu.getMaPhieu()+" ....");
+        Log.i(TAG, "deletePhieu: "+phieu.getMaPhieu()+" ....");
         SQLiteDatabase db = this.getWritableDatabase();
         if(checkDeletePhieu(phieu.getMaPhieu())){
             db.delete(TABLE_PHIEUCHAMBAI,COLUMN_SOPHIEU+"=?", new String[] {String.valueOf(phieu.getMaPhieu())});
@@ -407,5 +442,13 @@ public class DbHelper extends SQLiteOpenHelper {
         else{
             return -1;
         }
+    }
+    public int deleteThongTinPhieu(ThongTinPhieu thongTinPhieu){
+        Log.i(TAG, "deleteThongTinPhieu: "+thongTinPhieu.getMaPhieu()+" ....");
+        SQLiteDatabase db = this.getWritableDatabase();
+        int re = db.delete(TABLE_THONGTINCHAMBAI,COLUMN_SOPHIEU_FK+"=? AND "+COLUMN_MAMH_FK+" = ?",
+                new String[] {String.valueOf(thongTinPhieu.getMaPhieu()),String.valueOf(thongTinPhieu.getMaMon())});
+        db.close();
+        return re;
     }
 }

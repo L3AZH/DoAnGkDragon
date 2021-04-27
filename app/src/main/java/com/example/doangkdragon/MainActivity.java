@@ -31,7 +31,9 @@ import com.example.doangkdragon.dialog.AddGiaoVienDialog;
 import com.example.doangkdragon.dialog.AddMonHocDialog;
 import com.example.doangkdragon.dialog.AddPhieuDialog;
 import com.example.doangkdragon.dialog.AddThongTinPhieuDialog;
+import com.example.doangkdragon.dialog.InfoChiTietThongTinPhieuDialog;
 import com.example.doangkdragon.dialog.InfoMonHocDialog;
+import com.example.doangkdragon.dialog.UpdateChiTietThongTinPhieuDialog;
 import com.example.doangkdragon.dialog.UpdateGiaoVienDialog;
 import com.example.doangkdragon.dialog.UpdateMonHocDialog;
 import com.example.doangkdragon.dialog.UpdatePhieuDialog;
@@ -51,7 +53,9 @@ public class MainActivity extends AppCompatActivity implements
         UpdateGiaoVienDialog.UpdateDialogListener,
         InfoMonHocDialog.UpdateInfoMonHocListener,
         UpdateMonHocDialog.UpdateMonHocDialogListener,
-        UpdatePhieuDialog.UpdatePhieuDialogListenter {
+        UpdatePhieuDialog.UpdatePhieuDialogListenter,
+        UpdateChiTietThongTinPhieuDialog.UpdateChiTietThongTinPhieuListener,
+        InfoChiTietThongTinPhieuDialog.UpdateInfoChiTietThongTinPhieuDialogListener {
 
     private ActivityMainBinding binding;
 
@@ -125,5 +129,21 @@ public class MainActivity extends AppCompatActivity implements
         ThongTinPhieuFragment thongTinPhieuFragment = (ThongTinPhieuFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
         thongTinPhieuFragment.phieuGetFromList = phieu;
         thongTinPhieuFragment.setUpInfoPhieu();
+    }
+
+    @Override
+    public void updateListThongTinPhieu_dialogUpdateChiTietThongTinPhieu(Vector<ThongTinPhieu> listThongTinPhieu) {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        ThongTinPhieuFragment thongTinPhieuFragment = (ThongTinPhieuFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        thongTinPhieuFragment.adapter.listThongTinPhieu = listThongTinPhieu;
+        thongTinPhieuFragment.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void UpdateListChiTietThonTinPhieu_dialogInfoChiTietThongTinPhieu(Vector<ThongTinPhieu> listThongTinPhieu) {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        ThongTinPhieuFragment thongTinPhieuFragment = (ThongTinPhieuFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        thongTinPhieuFragment.adapter.listThongTinPhieu = listThongTinPhieu;
+        thongTinPhieuFragment.adapter.notifyDataSetChanged();
     }
 }
