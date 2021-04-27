@@ -56,6 +56,7 @@ public class QuanLyFragment extends Fragment {
             public void handlerOnclick(GiaoVien giaoVien) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("giaovien",giaoVien);
+                Toast.makeText(getContext(), "Giao vien Id: "+giaoVien.getMaGv(), Toast.LENGTH_SHORT).show();
                 NavHostFragment.findNavController(QuanLyFragment.this).navigate(R.id.action_quanLyFragment_to_giaoVienFragment,bundle);
             }
 

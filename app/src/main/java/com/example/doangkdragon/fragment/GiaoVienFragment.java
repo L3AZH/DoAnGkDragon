@@ -20,14 +20,16 @@ import com.example.doangkdragon.databinding.FragmentGiaoVienBinding;
 import com.example.doangkdragon.db.DbHelper;
 import com.example.doangkdragon.db.models.GiaoVien;
 import com.example.doangkdragon.db.models.Phieu;
+import com.example.doangkdragon.dialog.AddGiaoVienDialog;
 import com.example.doangkdragon.dialog.AddPhieuDialog;
+import com.example.doangkdragon.dialog.UpdateGiaoVienDialog;
 
 
 public class GiaoVienFragment extends Fragment{
 
 
-    private FragmentGiaoVienBinding binding;
-    private GiaoVien gvGetFormList ;
+    public FragmentGiaoVienBinding binding;
+    public GiaoVien gvGetFormList ;
     public PhieuChamBaiAdapter phieuAdapter;
     public GiaoVienFragment() {
         // Required empty public constructor
@@ -48,6 +50,7 @@ public class GiaoVienFragment extends Fragment{
         setInformationGv();
         setUpRecycleView();
         setOnclickFloatBtn();
+        setOnlickEditBtn();
     }
 
     public void setInformationGv(){
@@ -77,6 +80,15 @@ public class GiaoVienFragment extends Fragment{
             public void onClick(View v) {
                 AddPhieuDialog dialog = new AddPhieuDialog(gvGetFormList.getMaGv());
                 dialog.show(getActivity().getSupportFragmentManager(),"add phieu dialog");
+            }
+        });
+    }
+    public void setOnlickEditBtn(){
+        binding.editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpdateGiaoVienDialog dialog = new UpdateGiaoVienDialog(gvGetFormList);
+                dialog.show(getActivity().getSupportFragmentManager(),"update giao vien dialog");
             }
         });
     }

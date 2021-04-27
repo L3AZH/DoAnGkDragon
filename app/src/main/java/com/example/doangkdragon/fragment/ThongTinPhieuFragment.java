@@ -26,8 +26,8 @@ import com.example.doangkdragon.dialog.AddThongTinPhieuDialog;
 
 public class ThongTinPhieuFragment extends Fragment {
 
-    private FragmentThongTinPhieuBinding binding;
-    private Phieu phieuGetFromList;
+    public FragmentThongTinPhieuBinding binding;
+    public Phieu phieuGetFromList;
     public ThongTinPhieuChamBaiAdapter adapter;
 
 

@@ -183,6 +183,24 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public int updateGiaoVien(GiaoVien giaoVienUpdate){
+        Log.i(TAG, "Updating Giao vien: " + giaoVienUpdate.getMaGv() + " into Database");
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_HOTENGV, giaoVienUpdate.getHoTenGv());
+        values.put(COLUMN_SDT, giaoVienUpdate.getSDT());
+        values.put(COLUMN_HINHGV, giaoVienUpdate.getHinh());
+        try {
+            int re = db.update(TABLE_GV,values,COLUMN_MAGV+" = ? " ,
+                    new String[]{String.valueOf(giaoVienUpdate.getMaGv())});
+            db.close();
+            return re;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public Vector<GiaoVien> getListGv() {
         Log.i(TAG, "getListMaGv ...");
         Vector<GiaoVien> getListGv = new Vector<>();

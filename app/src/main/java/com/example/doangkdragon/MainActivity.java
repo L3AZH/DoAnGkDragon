@@ -31,6 +31,7 @@ import com.example.doangkdragon.dialog.AddGiaoVienDialog;
 import com.example.doangkdragon.dialog.AddMonHocDialog;
 import com.example.doangkdragon.dialog.AddPhieuDialog;
 import com.example.doangkdragon.dialog.AddThongTinPhieuDialog;
+import com.example.doangkdragon.dialog.UpdateGiaoVienDialog;
 import com.example.doangkdragon.fragment.GiaoVienFragment;
 import com.example.doangkdragon.fragment.QuanLyFragment;
 import com.example.doangkdragon.fragment.ThongKeFragment;
@@ -43,10 +44,10 @@ public class MainActivity extends AppCompatActivity implements
         AddGiaoVienDialog.UpdateDialogListener,
         AddMonHocDialog.UpdateDiaLogListener,
         AddPhieuDialog.UpdateDiaLogListener,
-        AddThongTinPhieuDialog.UpdateDiaLogListener {
+        AddThongTinPhieuDialog.UpdateDiaLogListener,
+        UpdateGiaoVienDialog.UpdateDialogListener {
 
     private ActivityMainBinding binding;
-    private DbHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,5 +87,13 @@ public class MainActivity extends AppCompatActivity implements
         ThongTinPhieuFragment thongTinPhieuFragment = (ThongTinPhieuFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
         thongTinPhieuFragment.adapter.listThongTinPhieu = listUpdate;
         thongTinPhieuFragment.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateListGv_update(GiaoVien giaoVienUpdate) {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        GiaoVienFragment giaoVienFragment = (GiaoVienFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        giaoVienFragment.gvGetFormList = giaoVienUpdate;
+        giaoVienFragment.setInformationGv();
     }
 }
