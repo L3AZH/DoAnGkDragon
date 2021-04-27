@@ -55,9 +55,9 @@ public class GiaoVienAdapter extends RecyclerView.Adapter<GiaoVienAdapter.MyView
         }
 
         public void setUpBinding(GiaoVien giaoVien){
-            binding.maGvTextView.setText(String.valueOf(giaoVien.getMaGv()));
-            binding.tenGvTextView.setText(giaoVien.getHoTenGv());
-            binding.sdtTextView.setText(String.valueOf(giaoVien.getSDT()));
+            binding.maGvTextView.setText("ID: " + String.valueOf(giaoVien.getMaGv()));
+            binding.tenGvTextView.setText("Ho va Ten: " + giaoVien.getHoTenGv());
+            binding.sdtTextView.setText("SDT: " + String.valueOf(giaoVien.getSDT()));
             binding.imageView.setImageBitmap(BitmapFactory.decodeByteArray(giaoVien.getHinh(),0,giaoVien.getHinh().length));
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

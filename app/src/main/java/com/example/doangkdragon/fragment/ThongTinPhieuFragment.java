@@ -49,7 +49,7 @@ public class ThongTinPhieuFragment extends Fragment {
     }
 
     public void setUpInfoPhieu(){
-        binding.maPhieuInfoTextView.setText(String.valueOf(phieuGetFromList.getMaPhieu()));
+        binding.maPhieuInfoTextView.setText(String.valueOf("Ma Phieu: " + phieuGetFromList.getMaPhieu()));
         binding.ngayInfoTextView.setText(phieuGetFromList.getNgay());
         binding.maGvFkInfoTextView.setText(String.valueOf(phieuGetFromList.getMaGv()));
     }

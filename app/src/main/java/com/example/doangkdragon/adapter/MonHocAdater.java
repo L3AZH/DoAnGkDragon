@@ -52,9 +52,9 @@ public class MonHocAdater extends RecyclerView.Adapter<MonHocAdater.MyViewHolder
         }
 
         public void setUpBinding(Mon monHoc){
-            binding.maMhTextView.setText(String.valueOf(monHoc.getMaMh()));
-            binding.tenMhTextView.setText(monHoc.getTenMh());
-            binding.chiPhiTextView.setText(String.valueOf(monHoc.getChiPhi()));
+            binding.maMhTextView.setText("MAMH: " +  String.valueOf(monHoc.getMaMh()));
+            binding.tenMhTextView.setText("Ten MH: " + monHoc.getTenMh());
+            binding.chiPhiTextView.setText("Chi Phi: " + String.valueOf(monHoc.getChiPhi()));
         }
     }
 }

@@ -51,9 +51,9 @@ public class ThongTinPhieuChamBaiAdapter extends RecyclerView.Adapter<ThongTinPh
             this.binding = binding;
         }
         public void setUpBinding(ThongTinPhieu thongTinPhieu){
-            binding.maPhieuInforFkTextView.setText(String.valueOf(thongTinPhieu.getMaPhieu()));
-            binding.maMonHocFkTextView.setText(String.valueOf(thongTinPhieu.getMaMon()));
-            binding.soBaiTextView.setText(String.valueOf(thongTinPhieu.getSoBai()));
+            binding.maPhieuInforFkTextView.setText("MP: " + String.valueOf(thongTinPhieu.getMaPhieu()));
+            binding.maMonHocFkTextView.setText("MAMH: " + String.valueOf(thongTinPhieu.getMaMon()));
+            binding.soBaiTextView.setText("So bai: " + String.valueOf(thongTinPhieu.getSoBai()));
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

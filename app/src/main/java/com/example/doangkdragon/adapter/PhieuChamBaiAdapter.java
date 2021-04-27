@@ -53,9 +53,9 @@ public class PhieuChamBaiAdapter extends RecyclerView.Adapter<PhieuChamBaiAdapte
         }
 
         public void setUpBinding(Phieu phieu) {
-            binding.maPhieuTextView.setText(String.valueOf(phieu.getMaPhieu()));
-            binding.ngayGiaoBaiTextView.setText(phieu.getNgay().toString());
-            binding.maGvFkTextView.setText(String.valueOf(phieu.getMaGv()));
+            binding.maPhieuTextView.setText("MP: " + String.valueOf(phieu.getMaPhieu()));
+            binding.ngayGiaoBaiTextView.setText("Ngay: " + phieu.getNgay().toString());
+            binding.maGvFkTextView.setText("MaGV: " + String.valueOf(phieu.getMaGv()));
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

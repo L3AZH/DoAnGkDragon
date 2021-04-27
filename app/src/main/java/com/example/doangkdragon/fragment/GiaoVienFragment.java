@@ -54,9 +54,9 @@ public class GiaoVienFragment extends Fragment{
     }
 
     public void setInformationGv(){
-        binding.maGvInfoTextView.setText(String.valueOf(gvGetFormList.getMaGv()));
-        binding.tenGvInfoTextView.setText(gvGetFormList.getHoTenGv());
-        binding.sdtGvInfoTextView.setText(String.valueOf(gvGetFormList.getSDT()));
+        binding.maGvInfoTextView.setText("ID: " +  String.valueOf(gvGetFormList.getMaGv()));
+        binding.tenGvInfoTextView.setText("Ho va Ten: " + gvGetFormList.getHoTenGv());
+        binding.sdtGvInfoTextView.setText("SDT: " + String.valueOf(gvGetFormList.getSDT()));
         binding.gvImgView.setImageBitmap(BitmapFactory.decodeByteArray(gvGetFormList.getHinh(),0,gvGetFormList.getHinh().length));
     }
     public void setUpRecycleView(){
