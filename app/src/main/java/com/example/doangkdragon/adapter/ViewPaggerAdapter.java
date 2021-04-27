@@ -19,6 +19,7 @@ import com.example.doangkdragon.databinding.ItemViewPagerBinding;
 import com.example.doangkdragon.db.models.GiaoVien;
 import com.example.doangkdragon.db.models.Mon;
 import com.example.doangkdragon.dialog.AddGiaoVienDialog;
+import com.example.doangkdragon.dialog.InfoMonHocDialog;
 
 import java.util.List;
 import java.util.Vector;
@@ -30,6 +31,7 @@ public class ViewPaggerAdapter extends RecyclerView.Adapter<ViewPaggerAdapter.My
     public Vector<Mon> listMonHoc;
     public Context context;
     public handlerOnclickItemGv handlerListener;
+    public handerOnclickItemMonHoc handlerListenerMonHoc;
 
     public ViewPaggerAdapter(List<String> listQuanLy,Context context) {
         this.listQuanLy = listQuanLy;
@@ -88,7 +90,14 @@ public class ViewPaggerAdapter extends RecyclerView.Adapter<ViewPaggerAdapter.My
                 case  "Môn Học":{
                     Log.i("MyViewHolder", "setUpBinding: Run case Mon Hoc");
                     binding.itemRecycleView.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
-                    binding.itemRecycleView.setAdapter(new MonHocAdater(mons));
+                    MonHocAdater mhAdapter = new MonHocAdater(mons);
+                    mhAdapter.listener = new MonHocAdater.onClickItemListener() {
+                        @Override
+                        public void onClickItem(Mon mon) {
+                            handlerListenerMonHoc.handlerOnclickMonHoc(mon);
+                        }
+                    };
+                    binding.itemRecycleView.setAdapter(mhAdapter);
                     break;
                 }
             }
@@ -97,5 +106,8 @@ public class ViewPaggerAdapter extends RecyclerView.Adapter<ViewPaggerAdapter.My
     public interface handlerOnclickItemGv{
         public void handlerOnclick(GiaoVien giaoVien);
         public boolean handlerLongclick(GiaoVien giaoVien);
+    }
+    public interface handerOnclickItemMonHoc{
+        public void handlerOnclickMonHoc(Mon mon);
     }
 }

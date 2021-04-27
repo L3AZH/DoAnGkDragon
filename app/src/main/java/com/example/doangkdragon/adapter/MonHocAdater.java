@@ -1,6 +1,7 @@
 package com.example.doangkdragon.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import java.util.Vector;
 public class MonHocAdater extends RecyclerView.Adapter<MonHocAdater.MyViewHolder> {
 
     public Vector<Mon> listMon ;
+    public onClickItemListener listener;
 
     public MonHocAdater(Vector<Mon> listMon){
         this.listMon = listMon;
@@ -55,6 +57,16 @@ public class MonHocAdater extends RecyclerView.Adapter<MonHocAdater.MyViewHolder
             binding.maMhTextView.setText("MAMH: " +  String.valueOf(monHoc.getMaMh()));
             binding.tenMhTextView.setText("Ten MH: " + monHoc.getTenMh());
             binding.chiPhiTextView.setText("Chi Phi: " + String.valueOf(monHoc.getChiPhi()));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClickItem(monHoc);
+                }
+            });
         }
+    }
+
+    public interface onClickItemListener{
+        public void onClickItem(Mon mon);
     }
 }

@@ -31,7 +31,9 @@ import com.example.doangkdragon.dialog.AddGiaoVienDialog;
 import com.example.doangkdragon.dialog.AddMonHocDialog;
 import com.example.doangkdragon.dialog.AddPhieuDialog;
 import com.example.doangkdragon.dialog.AddThongTinPhieuDialog;
+import com.example.doangkdragon.dialog.InfoMonHocDialog;
 import com.example.doangkdragon.dialog.UpdateGiaoVienDialog;
+import com.example.doangkdragon.dialog.UpdateMonHocDialog;
 import com.example.doangkdragon.fragment.GiaoVienFragment;
 import com.example.doangkdragon.fragment.QuanLyFragment;
 import com.example.doangkdragon.fragment.ThongKeFragment;
@@ -45,7 +47,9 @@ public class MainActivity extends AppCompatActivity implements
         AddMonHocDialog.UpdateDiaLogListener,
         AddPhieuDialog.UpdateDiaLogListener,
         AddThongTinPhieuDialog.UpdateDiaLogListener,
-        UpdateGiaoVienDialog.UpdateDialogListener {
+        UpdateGiaoVienDialog.UpdateDialogListener,
+        InfoMonHocDialog.UpdateInfoMonHocListener,
+        UpdateMonHocDialog.UpdateMonHocDialogListener {
 
     private ActivityMainBinding binding;
 
@@ -95,5 +99,21 @@ public class MainActivity extends AppCompatActivity implements
         GiaoVienFragment giaoVienFragment = (GiaoVienFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
         giaoVienFragment.gvGetFormList = giaoVienUpdate;
         giaoVienFragment.setInformationGv();
+    }
+
+    @Override
+    public void updateListMonHoc_infoDialog(Vector<Mon> listMon) {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        QuanLyFragment quanLyFragment = (QuanLyFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        quanLyFragment.adapter.listMonHoc = listMon;
+        quanLyFragment.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void update_updateMonHocDialog(Vector<Mon> listMon) {
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        QuanLyFragment quanLyFragment = (QuanLyFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        quanLyFragment.adapter.listMonHoc = listMon;
+        quanLyFragment.adapter.notifyDataSetChanged();
     }
 }

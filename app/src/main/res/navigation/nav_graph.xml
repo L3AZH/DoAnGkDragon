@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_giaoVienFragment_to_thongTinPhieuFragment"
             app:destination="@id/thongTinPhieuFragment" />
+        <action
+            android:id="@+id/action_giaoVienFragment_to_quanLyFragment"
+            app:destination="@id/quanLyFragment" />
     </fragment>
     <fragment
         android:id="@+id/thongTinPhieuFragment"

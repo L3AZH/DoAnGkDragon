@@ -19,8 +19,10 @@ import com.example.doangkdragon.adapter.ViewPaggerAdapter;
 import com.example.doangkdragon.databinding.FragmentQuanLyBinding;
 import com.example.doangkdragon.db.DbHelper;
 import com.example.doangkdragon.db.models.GiaoVien;
+import com.example.doangkdragon.db.models.Mon;
 import com.example.doangkdragon.dialog.AddGiaoVienDialog;
 import com.example.doangkdragon.dialog.AddMonHocDialog;
+import com.example.doangkdragon.dialog.InfoMonHocDialog;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.List;
@@ -63,6 +65,13 @@ public class QuanLyFragment extends Fragment {
             @Override
             public boolean handlerLongclick(GiaoVien giaoVien) {
                 return true;
+            }
+        };
+        adapter.handlerListenerMonHoc = new ViewPaggerAdapter.handerOnclickItemMonHoc() {
+            @Override
+            public void handlerOnclickMonHoc(Mon mon) {
+                InfoMonHocDialog dialog = new InfoMonHocDialog(mon);
+                dialog.show(getActivity().getSupportFragmentManager(),"info dialog mon hoc");
             }
         };
         binding.viewPage.setAdapter(adapter);

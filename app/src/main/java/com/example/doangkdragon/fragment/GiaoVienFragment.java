@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.doangkdragon.R;
 import com.example.doangkdragon.adapter.PhieuChamBaiAdapter;
@@ -51,6 +52,7 @@ public class GiaoVienFragment extends Fragment{
         setUpRecycleView();
         setOnclickFloatBtn();
         setOnlickEditBtn();
+        setOnclickDeleteBtn();
     }
 
     public void setInformationGv(){
@@ -89,6 +91,17 @@ public class GiaoVienFragment extends Fragment{
             public void onClick(View v) {
                 UpdateGiaoVienDialog dialog = new UpdateGiaoVienDialog(gvGetFormList);
                 dialog.show(getActivity().getSupportFragmentManager(),"update giao vien dialog");
+            }
+        });
+    }
+    public void setOnclickDeleteBtn(){
+        binding.deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbHelper db = new DbHelper(getContext());
+                int re = db.deleteGv(gvGetFormList);
+                Toast.makeText(getContext(), "delete result : "+re, Toast.LENGTH_SHORT).show();
+                NavHostFragment.findNavController(GiaoVienFragment.this).navigate(R.id.action_giaoVienFragment_to_quanLyFragment);
             }
         });
     }

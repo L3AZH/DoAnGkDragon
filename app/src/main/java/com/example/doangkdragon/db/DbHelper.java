@@ -201,6 +201,23 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public int updateMonHoc(Mon monHocUpdate){
+        Log.i(TAG, "Updating Mon hoc: " + monHocUpdate.getMaMh() + " into Database");
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TENMH, monHocUpdate.getTenMh());
+        values.put(COLUMN_CHIPHI, monHocUpdate.getChiPhi());
+        try {
+            int re = db.update(TABLE_MONHOC,values,COLUMN_MAMH+" = ? " ,
+                    new String[]{String.valueOf(monHocUpdate.getMaMh())});
+            db.close();
+            return re;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public Vector<GiaoVien> getListGv() {
         Log.i(TAG, "getListMaGv ...");
         Vector<GiaoVien> getListGv = new Vector<>();
@@ -294,5 +311,58 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         return null;
     }
-
+    public boolean checkDeleteGv(int maGv){
+        Log.i(TAG, "Check giao vien da ton tai phieu  ...");
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_PHIEUCHAMBAI + " WHERE "+COLUMN_MAGV_FK+" = ?;",
+                new String[]{String.valueOf(maGv)});
+        if(cursor != null){
+            cursor.moveToFirst();
+            if(cursor.getCount() == 0){
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+    public int deleteGv(GiaoVien giaoVienDel){
+        Log.i(TAG, "deleteGv: "+giaoVienDel.getMaGv()+" ....");
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(checkDeleteGv(giaoVienDel.getMaGv())){
+            db.delete(TABLE_GV,COLUMN_MAGV+"=?", new String[] {String.valueOf(giaoVienDel.getMaGv())});
+            db.close();
+            return 1;
+        }
+        else{
+            return -1;
+        }
+    }
+    public boolean checkDeleteMonHoc(int maMh){
+        Log.i(TAG, "Check Mon hoc da ton tai thong tin phieu  ...");
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_THONGTINCHAMBAI + " WHERE "+COLUMN_MAMH_FK+" = ?;",
+                new String[]{String.valueOf(maMh)});
+        if(cursor != null){
+            cursor.moveToFirst();
+            if(cursor.getCount() == 0){
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+    public int deleteMonHoc(Mon mon){
+        Log.i(TAG, "deleteGv: "+mon.getMaMh()+" ....");
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(checkDeleteMonHoc(mon.getMaMh())){
+            db.delete(TABLE_MONHOC,COLUMN_MAMH+"=?", new String[] {String.valueOf(mon.getMaMh())});
+            db.close();
+            return 1;
+        }
+        else{
+            return -1;
+        }
+    }
 }
