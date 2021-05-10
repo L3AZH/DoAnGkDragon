@@ -37,18 +37,20 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String TABLE_THONGTINCHAMBAI = "THONGTINCHAMBAI";
     private static final String COLUMN_SOPHIEU_FK = "SOPHIEU_FK";
     private static final String COLUMN_MAMH_FK = "MAMH_FK";
-    private static final String COLUMN_MASV_FK = "MASV_FK";
     private static final String COLUMN_SOBAI = "SOBAI";
     //Table MonHoc
     private static final String TABLE_MONHOC = "MONHOC";
     private static final String COLUMN_MAMH = "MAMH";
     private static final String COLUMN_TENMH = "TENMH";
     private static final String COLUMN_CHIPHI = "CHIPHI";
-    //Table SinhVien
-    private static final String TABLE_SINHVIEN = "SINHVIEN";
-    private static final String COLUMN_MASV = "MASV";
-    private static final String COLUMN_TENSV = "TENSV";
-    private static final String COLUMN_HINHSV = "HINHSV";
+    //Table Bai
+    private static final String TABLE_BAI = "BAI";
+    public static final String COLUMN_MABAI = "MABAI";
+    private static final String COLUMN_SOPHIEU_FK_BAI = "SOPHIEU_FK_BAI";
+    private static final String COLUMN_MAMH_FK_BAI = "MAMH_FK_BAI";
+    public static final String COLUMN_DIEM = "DIEM";
+    public static final String COLUMN_TINHTRANG = "TINHTRANG";
+
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -76,11 +78,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 COLUMN_TENMH + " TEXT, " +
                 COLUMN_CHIPHI + " DOUBLE );";
         db.execSQL(query);
-        query = "CREATE TABLE " + TABLE_SINHVIEN + " ( " +
-                COLUMN_MASV + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_TENSV + " TEXT, " +
-                COLUMN_HINHSV + " BLOB );";
-        db.execSQL(query);
         query = "CREATE TABLE " + TABLE_THONGTINCHAMBAI + " ( " +
                 COLUMN_SOPHIEU_FK + " INTEGER, " +
                 COLUMN_MAMH_FK + " INTEGER, " +
@@ -89,6 +86,18 @@ public class DbHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY ( " + COLUMN_SOPHIEU_FK + ") REFERENCES " + TABLE_PHIEUCHAMBAI + "(" + COLUMN_MAGV + "), " +
                 "FOREIGN KEY ( " + COLUMN_MAMH_FK + ") REFERENCES " + TABLE_MONHOC + "(" + COLUMN_MAMH + ")); ";
         db.execSQL(query);
+        query = "CREATE TABLE " + TABLE_BAI+ " ( " +
+                COLUMN_MABAI + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_SOPHIEU_FK_BAI + " INTEGER, " +
+                COLUMN_MAMH_FK_BAI + " INTEGER, " +
+                COLUMN_DIEM + " INTEGER, " +
+                COLUMN_TINHTRANG + " TEXT, " +
+                "PRIMARY KEY (" + COLUMN_MABAI + "), " +
+                "FOREIGN KEY ( " + COLUMN_SOPHIEU_FK_BAI + ") " +
+                "REFERENCES " + TABLE_THONGTINCHAMBAI + "(" + COLUMN_SOPHIEU_FK + "), " +
+                "FOREIGN KEY ( " + COLUMN_MAMH_FK_BAI + ") " +
+                "REFERENCES " + TABLE_THONGTINCHAMBAI + "(" + COLUMN_MAMH_FK + ")); ";
+        db.execSQL(query);
     }
 
     @Override
@@ -96,26 +105,10 @@ public class DbHelper extends SQLiteOpenHelper {
         Log.i(TAG, "Upgrade Database...........");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_GV);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MONHOC);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SINHVIEN);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHIEUCHAMBAI);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_THONGTINCHAMBAI);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BAI);
         onCreate(db);
-    }
-
-    public int addSinhVien(SinhVien sinhVien) {
-        Log.i(TAG, "Adding Sinh vien: " + sinhVien.getHoTenSv() + " into Database");
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_TENSV, sinhVien.getHoTenSv());
-        values.put(COLUMN_HINHSV, sinhVien.getHinh());
-        try {
-            db.insert(TABLE_SINHVIEN, null, values);
-            db.close();
-            return 1;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
     }
 
     public int addGiaoVien(GiaoVien giaoVien) {
