@@ -18,6 +18,7 @@ import com.example.doangkdragon.R;
 import com.example.doangkdragon.databinding.DialogAddThongtinphieuBinding;
 import com.example.doangkdragon.db.DbHelper;
 import com.example.doangkdragon.db.models.ThongTinPhieu;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Vector;
 
@@ -68,10 +69,15 @@ public class UpdateChiTietThongTinPhieuDialog extends DialogFragment {
                     DbHelper db = new DbHelper(getContext());
                     ThongTinPhieu thongTinPhieuUpdate = new ThongTinPhieu(thongTinPhieu.getMaPhieu(),
                             thongTinPhieu.getMaMon(),Integer.parseInt(binding.soBaiEditText.getText().toString()));
-                    db.updateThongTinPhieu(thongTinPhieuUpdate);
+                    int re = db.updateThongTinPhieu(thongTinPhieuUpdate);
                     listener.updateListThongTinPhieu_dialogUpdateChiTietThongTinPhieu(db.getListThongTinPhieu(thongTinPhieuUpdate.getMaPhieu()));
                     db.close();
-                    getDialog().cancel();
+                    if(re == -2){
+                        Snackbar.make(binding.getRoot(),"Khong the update vi ton tai bai: re= "+re,Snackbar.LENGTH_LONG).show();
+                    }
+                    else{
+                        getDialog().cancel();
+                    }
                 }
             }
         });

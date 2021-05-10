@@ -73,11 +73,16 @@ public class InfoChiTietThongTinPhieuDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 DbHelper db = new DbHelper(getContext());
-                db.deleteThongTinPhieu(thongTinPhieu);
+                int re = db.deleteThongTinPhieu(thongTinPhieu);
                 listener.UpdateListChiTietThonTinPhieu_dialogInfoChiTietThongTinPhieu(
                         db.getListThongTinPhieu(thongTinPhieu.getMaPhieu()));
                 db.close();
-                getDialog().cancel();
+                if(re == -1){
+                    Snackbar.make(binding.getRoot(),"Khong the delete vi ton tai bai: re= "+re,Snackbar.LENGTH_LONG).show();
+                }
+                else{
+                    getDialog().cancel();
+                }
             }
         });
     }

@@ -292,7 +292,31 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public int updateThongTinPhieu(ThongTinPhieu thongTinPhieu){
         Log.i(TAG, "Updating thong tin phieu: " + thongTinPhieu.getMaPhieu() + " into Database");
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from "+TABLE_BAI+
+                " where "+COLUMN_SOPHIEU_FK_BAI+" = ? AND "+
+                COLUMN_MAMH_FK_BAI+" = ? ",
+                new String[]{String.valueOf(thongTinPhieu.getMaPhieu()),
+                        String.valueOf(thongTinPhieu.getMaMon())});
+        if(cursor != null){
+            cursor.moveToFirst();
+            if(cursor.getCount() == 0){
+                db = this.getWritableDatabase();
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_SOBAI, thongTinPhieu.getSoBai());
+                try {
+                    int re = db.update(TABLE_THONGTINCHAMBAI,values,COLUMN_SOPHIEU_FK+" = ? AND "+COLUMN_MAMH_FK+" = ?" ,
+                            new String[]{String.valueOf(thongTinPhieu.getMaPhieu()),String.valueOf(thongTinPhieu.getMaMon())});
+                    db.close();
+                    return re;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return -1;
+                }
+            }
+            return -2;
+        }
+        db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_SOBAI, thongTinPhieu.getSoBai());
         try {
@@ -480,12 +504,34 @@ public class DbHelper extends SQLiteOpenHelper {
             return -1;
         }
     }
+    public boolean checkDeleteThongTinPhieu(ThongTinPhieu thongTinPhieu){
+        Log.i(TAG, "Check thong tin phieu da ton tai bai  ...");
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from "+TABLE_BAI+
+                        " where "+COLUMN_SOPHIEU_FK_BAI+" = ? AND "+
+                        COLUMN_MAMH_FK_BAI+" = ? ",
+                new String[]{String.valueOf(thongTinPhieu.getMaPhieu()),
+                        String.valueOf(thongTinPhieu.getMaMon())});
+        if(cursor != null){
+            cursor.moveToFirst();
+            if(cursor.getCount() == 0){
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
     public int deleteThongTinPhieu(ThongTinPhieu thongTinPhieu){
         Log.i(TAG, "deleteThongTinPhieu: "+thongTinPhieu.getMaPhieu()+" ....");
         SQLiteDatabase db = this.getWritableDatabase();
-        int re = db.delete(TABLE_THONGTINCHAMBAI,COLUMN_SOPHIEU_FK+"=? AND "+COLUMN_MAMH_FK+" = ?",
-                new String[] {String.valueOf(thongTinPhieu.getMaPhieu()),String.valueOf(thongTinPhieu.getMaMon())});
-        db.close();
-        return re;
+        if(checkDeleteThongTinPhieu(thongTinPhieu)){
+            int re = db.delete(TABLE_THONGTINCHAMBAI,COLUMN_SOPHIEU_FK+"=? AND "+COLUMN_MAMH_FK+" = ?",
+                    new String[] {String.valueOf(thongTinPhieu.getMaPhieu()),String.valueOf(thongTinPhieu.getMaMon())});
+            db.close();
+            return re;
+        }
+        else{
+            return -1;
+        }
     }
 }
