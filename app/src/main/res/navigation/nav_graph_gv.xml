@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_gv"
+    app:startDestination="@id/giaoVienPhieuChamBaiFragment">
+
+    <fragment
+        android:id="@+id/giaoVienPhieuChamBaiFragment"
+        android:name="com.example.doangkdragon.fragment.GiaoVienPhieuChamBaiFragment"
+        android:label="GiaoVienPhieuChamBaiFragment" >
+        <action
+            android:id="@+id/action_giaoVienPhieuChamBaiFragment_to_giaoVienThongTinPhieuChamBaiFragment"
+            app:destination="@id/giaoVienThongTinPhieuChamBaiFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/giaoVienThongTinPhieuChamBaiFragment"
+        android:name="com.example.doangkdragon.fragment.GiaoVienThongTinPhieuChamBaiFragment"
+        android:label="fragment_giao_vien_thong_tin_phieu_cham_bai"
+        tools:layout="@layout/fragment_giao_vien_thong_tin_phieu_cham_bai" >
+        <action
+            android:id="@+id/action_giaoVienThongTinPhieuChamBaiFragment_to_giaoVienPhieuChamBaiFragment"
+            app:destination="@id/giaoVienPhieuChamBaiFragment" />
+        <action
+            android:id="@+id/action_giaoVienThongTinPhieuChamBaiFragment_to_giaoVienChamBaiFragment"
+            app:destination="@id/giaoVienChamBaiFragment" />
+        <argument
+            android:name="phieu"
+            app:argType="com.example.doangkdragon.db.models.Phieu" />
+    </fragment>
+    <fragment
+        android:id="@+id/giaoVienChamBaiFragment"
+        android:name="com.example.doangkdragon.fragment.GiaoVienChamBaiFragment"
+        android:label="fragment_giao_vien_cham_bai"
+        tools:layout="@layout/fragment_giao_vien_cham_bai" >
+        <action
+            android:id="@+id/action_giaoVienChamBaiFragment_to_giaoVienThongTinPhieuChamBaiFragment"
+            app:destination="@id/giaoVienThongTinPhieuChamBaiFragment" />
+        <argument
+            android:name="thongtinphieu"
+            app:argType="com.example.doangkdragon.db.models.ThongTinPhieu" />
+    </fragment>
+</navigation>

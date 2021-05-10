@@ -1,6 +1,8 @@
 package com.example.doangkdragon.db.models;
 
-public class ThongTinPhieu {
+import java.io.Serializable;
+
+public class ThongTinPhieu implements Serializable {
     private int maPhieu;
     private int maMon;
     private int soBai;
