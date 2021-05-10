@@ -15,7 +15,9 @@ import androidx.fragment.app.DialogFragment;
 import com.example.doangkdragon.R;
 import com.example.doangkdragon.databinding.DialogInfoChitietthongtinphieuBinding;
 import com.example.doangkdragon.db.DbHelper;
+import com.example.doangkdragon.db.models.Bai;
 import com.example.doangkdragon.db.models.ThongTinPhieu;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Vector;
 
@@ -39,6 +41,7 @@ public class InfoChiTietThongTinPhieuDialog extends DialogFragment {
         setOnclickCancelBtn();
         setOnclickDeleteBtn();
         setOnclickEditBtn();
+        setOnclickAddBaiBtn();
         //setOnclickSaveBtn();
         return builder.create();
     }
@@ -71,9 +74,40 @@ public class InfoChiTietThongTinPhieuDialog extends DialogFragment {
             public void onClick(View v) {
                 DbHelper db = new DbHelper(getContext());
                 db.deleteThongTinPhieu(thongTinPhieu);
-                listener.UpdateListChiTietThonTinPhieu_dialogInfoChiTietThongTinPhieu(db.getListThongTinPhieu(thongTinPhieu.getMaPhieu()));
+                listener.UpdateListChiTietThonTinPhieu_dialogInfoChiTietThongTinPhieu(
+                        db.getListThongTinPhieu(thongTinPhieu.getMaPhieu()));
                 db.close();
                 getDialog().cancel();
+            }
+        });
+    }
+    public void setOnclickAddBaiBtn(){
+        binding.addBaiBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbHelper db = new DbHelper(getContext());
+                int re = db.addBai(new Bai(
+                                thongTinPhieu.getMaPhieu(),
+                                thongTinPhieu.getMaMon(),0,"Chua cham"));
+                db.close();
+                switch (re){
+                    case -2:{
+                        Snackbar.make(binding.getRoot(),"Loi search db vui long check lai",Snackbar.LENGTH_LONG).show();
+                        break;
+                    }
+                    case -1:{
+                        Snackbar.make(binding.getRoot(),"So luong bai da vuot qua so luong bai dang ki !!",Snackbar.LENGTH_LONG).show();
+                        break;
+                    }
+                    case 0:{
+                        Snackbar.make(binding.getRoot(),"Add bai that bai",Snackbar.LENGTH_LONG).show();
+                        break;
+                    }
+                    case 1:{
+                        Snackbar.make(binding.getRoot(),"Add bai thanh cong",Snackbar.LENGTH_LONG).show();
+                        break;
+                    }
+                }
             }
         });
     }

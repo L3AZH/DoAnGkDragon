@@ -51,8 +51,18 @@ public class QuanLyFragment extends Fragment {
         listObject.add("Giáo Viên");
         listObject.add("Môn Học");
         adapter = new ViewPaggerAdapter(listObject,this.getContext());
-        adapter.listGiaoVien = db.getListGv();
-        adapter.listMonHoc = db.getListMonHoc();
+        if(db.getListGv() == null){
+            adapter.listGiaoVien = new Vector<GiaoVien>();
+        }
+        else{
+            adapter.listGiaoVien = db.getListGv();
+        }
+        if(db.getListMonHoc() == null){
+            adapter.listMonHoc = new Vector<Mon>();
+        }
+        else{
+            adapter.listMonHoc = db.getListMonHoc();
+        }
         adapter.handlerListener = new ViewPaggerAdapter.handlerOnclickItemGv() {
             @Override
             public void handlerOnclick(GiaoVien giaoVien) {

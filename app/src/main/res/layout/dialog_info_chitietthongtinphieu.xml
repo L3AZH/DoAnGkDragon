@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_gravity="end"
+            android:layout_gravity="center"
             android:orientation="horizontal">
 
             <Button
@@ -58,6 +58,13 @@
                 android:layout_weight="1"
                 android:text="Cancel" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/addBaiBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="+ Bai" />
 
     </LinearLayout>
 </layout>

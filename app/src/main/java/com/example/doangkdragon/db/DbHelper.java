@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.doangkdragon.db.models.Bai;
 import com.example.doangkdragon.db.models.GiaoVien;
 import com.example.doangkdragon.db.models.Mon;
 import com.example.doangkdragon.db.models.Phieu;
@@ -92,7 +93,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 COLUMN_MAMH_FK_BAI + " INTEGER, " +
                 COLUMN_DIEM + " INTEGER, " +
                 COLUMN_TINHTRANG + " TEXT, " +
-                "PRIMARY KEY (" + COLUMN_MABAI + "), " +
                 "FOREIGN KEY ( " + COLUMN_SOPHIEU_FK_BAI + ") " +
                 "REFERENCES " + TABLE_THONGTINCHAMBAI + "(" + COLUMN_SOPHIEU_FK + "), " +
                 "FOREIGN KEY ( " + COLUMN_MAMH_FK_BAI + ") " +
@@ -159,6 +159,50 @@ public class DbHelper extends SQLiteOpenHelper {
             return 0;
         }
     }
+
+    public int addBai(Bai bai){
+        Log.i(TAG, "addBai: soPhieu-"+bai.getSoPhieu()+" va maMh-"+bai.getMaMonHoc()+" intoDatabase");
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select " + COLUMN_SOBAI +
+                " from " + TABLE_THONGTINCHAMBAI +
+                " where " + COLUMN_SOPHIEU_FK + " = ? AND " +
+                COLUMN_MAMH_FK + " = ? ;",new String[]{String.valueOf(bai.getSoPhieu()),String.valueOf(bai.getMaMonHoc())});
+        if(cursor != null){
+            cursor.moveToFirst();
+            if(cursor.getCount()==0){
+                return -2;
+            }
+            else{
+                int soBai = cursor.getInt(0);
+                cursor = db.rawQuery("select * from "+TABLE_BAI+
+                        " where "+COLUMN_SOPHIEU_FK_BAI+" = ? AND "+
+                        COLUMN_MAMH_FK_BAI+" = ? ",new String[]{String.valueOf(bai.getSoPhieu()),String.valueOf(bai.getMaMonHoc())});
+                if(cursor != null){
+                    cursor.moveToFirst();
+                    if (cursor.getCount()>=soBai){
+                        return -1;
+                    }
+                    db = this.getWritableDatabase();
+                    ContentValues values = new ContentValues();
+                    values.put(COLUMN_SOPHIEU_FK_BAI,bai.getSoPhieu());
+                    values.put(COLUMN_MAMH_FK_BAI,bai.getMaMonHoc());
+                    values.put(COLUMN_DIEM,bai.getDiem());
+                    values.put(COLUMN_TINHTRANG,bai.getTinhTrang());
+                    try {
+                        db.insert(TABLE_BAI ,null, values);
+                        db.close();
+                        return 1;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return 0;
+                    }
+                }
+                return -2;
+            }
+        }
+        return -2;
+    }
+
     public boolean checkThongTinPhieuChamBai(ThongTinPhieu thongTinPhieu){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
