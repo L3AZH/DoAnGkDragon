@@ -330,6 +330,23 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public int updateBai(Bai bai){
+        Log.i(TAG, "Updating Bai: " + bai.getMaBai() + " into Database");
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_DIEM, bai.getDiem());
+        values.put(COLUMN_TINHTRANG, bai.getTinhTrang());
+        try {
+            int re = db.update(TABLE_BAI,values,COLUMN_MABAI+" = ? " ,
+                    new String[]{String.valueOf(bai.getMaBai())});
+            db.close();
+            return re;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public Vector<GiaoVien> getListGv() {
         Log.i(TAG, "getListMaGv ...");
         Vector<GiaoVien> getListGv = new Vector<>();
@@ -420,6 +437,60 @@ public class DbHelper extends SQLiteOpenHelper {
                 getListThongTinPhieu.add(thongTinPhieuAdd);
             } while (cursor.moveToNext());
             return getListThongTinPhieu;
+        }
+        return null;
+    }
+    public Vector<Bai> getListBai(int soPhieu,int maMon){
+        Log.i(TAG, "getListBai ...");
+        Vector<Bai> getListBai = new Vector<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_BAI + " WHERE "+COLUMN_SOPHIEU_FK_BAI+" = ? "+
+                " AND "+COLUMN_MAMH_FK_BAI+" = ? ;",
+                new String[]{String.valueOf(soPhieu),String.valueOf(maMon)});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if(cursor.getCount() == 0){
+                return null;
+            }
+            do {
+                Bai bai = new Bai(
+                        cursor.getInt(0),
+                        cursor.getInt(1),
+                        cursor.getInt(2),
+                        cursor.getInt(3),
+                        cursor.getString(4));
+                Log.i(TAG, "getListBai: Ma bai"+cursor.getInt(0));
+                getListBai.add(bai);
+            } while (cursor.moveToNext());
+            return getListBai;
+        }
+        return null;
+    }
+    public Vector<Bai> getListBaiDaCham(int soPhieu,int maMon){
+        Log.i(TAG, "getListBai ...");
+        Vector<Bai> getListBai = new Vector<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_BAI + " WHERE "+COLUMN_SOPHIEU_FK_BAI+" = ? "+
+                        " AND "+COLUMN_MAMH_FK_BAI+" = ? AND "+COLUMN_TINHTRANG+" = 'Da cham' ;",
+                new String[]{String.valueOf(soPhieu),String.valueOf(maMon)});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if(cursor.getCount() == 0){
+                return null;
+            }
+            do {
+                Bai bai = new Bai(
+                        cursor.getInt(0),
+                        cursor.getInt(1),
+                        cursor.getInt(2),
+                        cursor.getInt(3),
+                        cursor.getString(4));
+                Log.i(TAG, "getListBai: Ma bai"+cursor.getInt(0));
+                getListBai.add(bai);
+            } while (cursor.moveToNext());
+            return getListBai;
         }
         return null;
     }

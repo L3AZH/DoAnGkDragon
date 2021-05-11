@@ -52,6 +52,11 @@ public class GiaoVienThongTinPhieuChamBaiFragment extends Fragment {
         adapter.listener = new ThongTinPhieuChamBaiAdapter.onClickItemListener() {
             @Override
             public void onClickItem(ThongTinPhieu thongTinPhieu) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("thongtinphieu",thongTinPhieu);
+                bundle.putSerializable("phieu",phieu);
+                NavHostFragment.findNavController(GiaoVienThongTinPhieuChamBaiFragment.this)
+                        .navigate(R.id.action_giaoVienThongTinPhieuChamBaiFragment_to_giaoVienChamBaiFragment,bundle);
             }
         };
         db.close();

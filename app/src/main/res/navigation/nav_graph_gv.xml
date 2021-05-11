@@ -39,5 +39,8 @@
         <argument
             android:name="thongtinphieu"
             app:argType="com.example.doangkdragon.db.models.ThongTinPhieu" />
+        <argument
+            android:name="phieu"
+            app:argType="com.example.doangkdragon.db.models.Phieu" />
     </fragment>
 </navigation>
