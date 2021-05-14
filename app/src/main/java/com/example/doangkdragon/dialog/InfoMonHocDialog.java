@@ -46,7 +46,7 @@ public class InfoMonHocDialog extends DialogFragment {
 
     public void setUpInfoMonHoc(){
         binding.tenMonHocInfoTextView.setText("Ten MH: "+monHocInfo.getTenMh());
-        binding.chiPhiMonHocInfoTextView.setText(String.valueOf("Chi phi: "+monHocInfo.getMaMh()));
+        binding.chiPhiMonHocInfoTextView.setText(String.valueOf("Chi phi: "+monHocInfo.getChiPhi()));
     }
 
     public void setOnclickCancelBtn(){

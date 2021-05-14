@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.doangkdragon.R;
 import com.example.doangkdragon.databinding.DialogAddThongtinphieuBinding;
 import com.example.doangkdragon.db.DbHelper;
+import com.example.doangkdragon.db.models.Bai;
 import com.example.doangkdragon.db.models.Mon;
 import com.example.doangkdragon.db.models.Phieu;
 import com.example.doangkdragon.db.models.ThongTinPhieu;
@@ -82,6 +83,11 @@ public class AddThongTinPhieuDialog extends DialogFragment {
                             Integer.parseInt(thongTinPhieuAddString[0]),Integer.parseInt(binding.soBaiEditText.getText().toString()));
                     int re = db.addThongTinPhieuChamBai(thongTinPhieuAdd);
                     Toast.makeText(getContext(), "Result add = "+re, Toast.LENGTH_SHORT).show();
+                    for(int i=0;i<Integer.parseInt(binding.soBaiEditText.getText().toString());i++){
+                        db.addBai(new Bai(
+                                thongTinPhieuAdd.getMaPhieu(),
+                                thongTinPhieuAdd.getMaMon(),0,"Chua cham"));
+                    }
                     listener.updateListThongTinPhieu(db.getListThongTinPhieu(soPhieu));
                     db.close();
                     getDialog().cancel();
